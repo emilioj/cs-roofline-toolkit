@@ -1,4 +1,4 @@
-import sys,operator,subprocess,os.path,glob,filecmp,math
+import sys,operator,subprocess,os,glob,filecmp,math
 import socket,platform,time,json
 
 from ert_utils import *
@@ -9,8 +9,12 @@ def text_list_2_string(text_list):
 class ert_core:
 
   def __init__(self):
+    self.ert_version = "0.8.0"
+
     self.dict = {}
     self.metadata = {}
+
+    self.metadata["ERT_VERSION"] = self.ert_version
 
     hostname = socket.gethostname()
     try:
@@ -20,8 +24,12 @@ class ert_core:
 
     hostname = new_hostname
 
+    hostname = os.getenv("NERSC_HOST",hostname)
+
     self.metadata["HOSTNAME"] = hostname
     self.metadata["UNAME"] = platform.uname()
+
+    print "Running ERT version %s..." % self.ert_version
 
   def flags(self):
     argc = len(sys.argv)
@@ -207,7 +215,7 @@ class ert_core:
               cur_command = command
               cur_command = cur_command.replace("ERT_TRY_NUM","%03d" % t)
 
-              self.metadata["TIMESTAMP"] = time.time()
+              self.metadata["TIMESTAMP_DATA"] = time.time()
 
               if execute_shell(cur_command) != 0:
                 sys.stderr.write("Unable to complete %s, experiment %d\n" % (run_dir,t))
@@ -317,6 +325,8 @@ class ert_core:
         else:
           gflops_metadata[parts[0].strip()] = parts[2].strip()
 
+    gflops_metadata["TIMESTAMP_DB"] = time.time()
+
     gflops = {}
     gflops['metadata'] = gflops_metadata
     gflops['data']     = gflops_data
@@ -348,6 +358,8 @@ class ert_core:
           gbytes_metadata[key] = value
         else:
           gbytes_metadata[parts[0].strip()] = parts[2].strip()
+
+    gbytes_metadata["TIMESTAMP_DB"] = time.time()
 
     gbytes = {}
     gbytes['metadata'] = gbytes_metadata
