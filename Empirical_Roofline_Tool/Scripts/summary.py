@@ -50,7 +50,7 @@ maxband = max(band)
 maxgflops = max(gflops)
 
 window = 0.035*(maxband - minband)
-delta = window/2.0
+fraction = 1.05
 
 samples = 10000
 dband = maxband/float(samples - 1)
@@ -64,7 +64,7 @@ for i in xrange(0,samples):
   cband = i*dband
 
   for v in band:
-    if v >= cband-delta and v <= cband+delta:
+    if v >= cband/fraction and v <= cband*fraction:
       totals[i] += v
       counts[i] += 1
 
