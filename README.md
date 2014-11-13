@@ -16,4 +16,4 @@ For details about the ERT, please refer to the User's Manual in the repository u
 
 ## Contact Information ##
 
-Please contact [Terry Ligocki](tjligocki@lbl.gov) with any questions, problems, corrections, suggestions, etc.
+Please contact [Terry Ligocki](mailto:tjligocki@lbl.gov) with any questions, problems, corrections, suggestions, etc.
