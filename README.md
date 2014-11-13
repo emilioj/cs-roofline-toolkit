@@ -1,43 +1,19 @@
 # CS Roofline Toolkit #
 
-Welcome to the CS Roofline Toolkit Bitbucket site.  The Empirical Roofline
-Tool is currently available here.  In the future additional tools will be
-hosted here.
+Welcome to the CS Roofline Toolkit Bitbucket site.  The Empirical Roofline Tool is currently available here.  In the future additional tools will be hosted here.
+
+For an overview of the Roofline Performance Model and this software's place in that context see [https://crd.lbl.gov/departments/computer-science/performance-and-algorithms-research/research/roofline/](https://crd.lbl.gov/departments/computer-science/performance-and-algorithms-research/research/roofline/).
 
 ## Empirical Roofline Tool ##
 
-The Empirical Roofline Tool, ERT, automatically generates a roofline data
-for a given computer.  This includes the maximum bandwidth for the various
-levels of the memory hierarchy and the maximum gflop rate.  This data is
-obtained using a variety of "micro-kernels".
+The Empirical Roofline Tool, ERT, automatically generates a roofline datafor a given computer.  This includes the maximum bandwidth for the various levels of the memory hierarchy and the maximum gflop rate.  This data is obtained using a variety of "micro-kernels".
 
-The ERT comes with a set of configuration files for a number of
-computers/architectures.  These configuration file can be adapted to your
-local environment and needs to better measure the roofline parameters of
-your computer(s).
+The ERT comes with a set of configuration files for a number of computers/architectures.  These configuration file can be adapted to your local environment and needs to better measure the roofline parameters of your computer(s).
 
-### What is this repository for? ###
+This is version 0.8.0 of the ERT which represents an early beta-release.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+For details about the ERT, please refer to the User's Manual in the repository under the "Empirical_Roofline_Tool" directory.
 
-### How do I get set up? ###
+## Contact Information ##
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+Please contact [Terry Ligocki](tjligocki@lbl.gov) with any questions, problems, corrections, suggestions, etc.
