@@ -305,41 +305,41 @@ class ert_core:
   def build_database(self,gflop,gbyte):
     gflop0 = gflop[0].split()
 
-    gflops_data = []
-    gflops_data.append([gflop0[1],float(gflop0[0])])
+    emp_gflops_data = []
+    emp_gflops_data.append([gflop0[1],float(gflop0[0])])
 
-    gflops_metadata = {}
+    emp_gflops_metadata = {}
     for metadata in gflop[1:]:
       parts = metadata.partition(" ")
       key = parts[0].strip()
       if key != "META_DATA":
-        if key in gflops_metadata:
-          value = gflops_metadata[key]
+        if key in emp_gflops_metadata:
+          value = emp_gflops_metadata[key]
 
           if isinstance(value,list):
             value.append(parts[2].strip())
           else:
             value = [value,parts[2].strip()]
 
-          gflops_metadata[key] = value
+          emp_gflops_metadata[key] = value
         else:
-          gflops_metadata[parts[0].strip()] = parts[2].strip()
+          emp_gflops_metadata[parts[0].strip()] = parts[2].strip()
 
-    gflops_metadata["TIMESTAMP_DB"] = time.time()
+    emp_gflops_metadata["TIMESTAMP_DB"] = time.time()
 
-    gflops = {}
-    gflops['metadata'] = gflops_metadata
-    gflops['data']     = gflops_data
+    emp_gflops = {}
+    emp_gflops['metadata'] = emp_gflops_metadata
+    emp_gflops['data']     = emp_gflops_data
 
-    gbytes_metadata = {}
-    gbytes_data = []
+    emp_gbytes_metadata = {}
+    emp_gbytes_data = []
 
     for i in xrange(0,len(gbyte)):
       if gbyte[i] == "META_DATA":
         break
       else:
         gbyte_split = gbyte[i].split()
-        gbytes_data.append([gbyte_split[1],float(gbyte_split[0])])
+        emp_gbytes_data.append([gbyte_split[1],float(gbyte_split[0])])
 
     for j in xrange(i+1,len(gbyte)):
       metadata = gbyte[j]
@@ -347,30 +347,50 @@ class ert_core:
       parts = metadata.partition(" ")
       key = parts[0].strip()
       if key != "META_DATA":
-        if key in gbytes_metadata:
-          value = gbytes_metadata[key]
+        if key in emp_gbytes_metadata:
+          value = emp_gbytes_metadata[key]
 
           if isinstance(value,list):
             value.append(parts[2].strip())
           else:
             value = [value,parts[2].strip()]
 
-          gbytes_metadata[key] = value
+          emp_gbytes_metadata[key] = value
         else:
-          gbytes_metadata[parts[0].strip()] = parts[2].strip()
+          emp_gbytes_metadata[parts[0].strip()] = parts[2].strip()
 
-    gbytes_metadata["TIMESTAMP_DB"] = time.time()
+    emp_gbytes_metadata["TIMESTAMP_DB"] = time.time()
 
-    gbytes = {}
-    gbytes['metadata'] = gbytes_metadata
-    gbytes['data']     = gbytes_data
+    emp_gbytes = {}
+    emp_gbytes['metadata'] = emp_gbytes_metadata
+    emp_gbytes['data']     = emp_gbytes_data
 
     empirical = {}
-    empirical['gflops'] = gflops
-    empirical['gbytes'] = gbytes
+    empirical['gflops'] = emp_gflops
+    empirical['gbytes'] = emp_gbytes
+
+    spec_gflops_data = []
+    if 'ERT_SPEC_GFLOPS' in self.dict:
+      spec_gflops_data.append(['GFLOPs',float(self.dict['ERT_SPEC_GFLOPS'][0])])
+
+    spec_gflops = {}
+    spec_gflops['data'] = spec_gflops_data
+
+    spec_gbytes_data = []
+    for k in self.dict:
+      if k.find('ERT_SPEC_GBYTES') == 0:
+        spec_gbytes_data.append([k[len('ERT_SPEC_GBYTES')+1:],float(self.dict[k][0])])
+
+    spec_gbytes = {}
+    spec_gbytes['data'] = spec_gbytes_data
+
+    spec = {}
+    spec['gflops'] = spec_gflops
+    spec['gbytes'] = spec_gbytes
 
     result = {}
     result['empirical'] = empirical
+    result['spec']      = spec
 
     return result
 
