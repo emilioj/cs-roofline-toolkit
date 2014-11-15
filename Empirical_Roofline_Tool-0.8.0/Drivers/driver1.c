@@ -107,6 +107,8 @@ int main(int argc, char *argv[]) {
     double startTime, endTime;
     uint64_t n,nNew;
     uint64_t t;
+    int bytes_per_elem;
+    int mem_accesses_per_elem;
 
     n = ERT_WORKING_SET_MIN;
     while (n < nsize) { // working set - nsize
@@ -136,15 +138,15 @@ int main(int argc, char *argv[]) {
         }
 
 #ifdef ERT_QPX // QPX intrinsics for IBM BGQ
-        vecFused(n, t, &buf[nid]);
+        vecKernel(n, t, &buf[nid]);
 #elif  ERT_SSE // SSE intrinsics for Hopper(AMD)
-        sseFused(n, t, &buf[nid]);
+        sseKernel(n, t, &buf[nid]);
 #elif  ERT_AVX // AVX intrinsics for Edison(intel xeon)
-        avxFused(n, t, &buf[nid]);
+        avxKernel(n, t, &buf[nid]);
 #elif  ERT_KNC // KNC intrinsics for Babbage(intel mic)
-        kncFused(n, t, &buf[nid]);
+        kncKernel(n, t, &buf[nid]);
 #else       // C-code
-        doFused(n, t, &buf[nid]);
+        kernel(n, t, &buf[nid], &bytes_per_elem, &mem_accesses_per_elem);
 #endif
 
 
@@ -168,14 +170,13 @@ int main(int argc, char *argv[]) {
           bgpm_print(evtSet);
 #endif
           double seconds = (double)(endTime - startTime);
-          uint64_t access_per_op = 2;
           uint64_t working_set_size = n * nthreads * nprocs;
-          uint64_t total_bytes = t * working_set_size * access_per_op * sizeof(double);
+          uint64_t total_bytes = t * working_set_size * bytes_per_elem * mem_accesses_per_elem;
           uint64_t total_flops = t * working_set_size * ERT_FLOP;
 
           // nsize; trials; microseconds; bytes; single thread bandwidth; total bandwidth
           printf("%12" PRIu64 " %12" PRIu64 " %15.3lf %12" PRIu64 " %12" PRIu64 "\n",
-                  n * nthreads * nprocs * sizeof(double),
+                  working_set_size * bytes_per_elem,
                   t,
                   seconds * 1000000,
                   total_bytes,

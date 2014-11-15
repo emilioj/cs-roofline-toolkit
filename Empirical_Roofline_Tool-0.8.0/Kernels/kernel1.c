@@ -4,7 +4,9 @@
 
 #include "rep.h"
 
-void initialize(uint64_t nsize, double * __restrict__ A, double value)
+void initialize(uint64_t nsize,
+                double* __restrict__ A,
+                double value)
 {
 #ifdef ERT_INTEL
    __assume_aligned(A, ERT_ALIGN);
@@ -18,8 +20,14 @@ void initialize(uint64_t nsize, double * __restrict__ A, double value)
   }
 }
 
-void doFused(uint64_t nsize, uint64_t ntrials, double * __restrict__ A)
+void kernel(uint64_t nsize,
+            uint64_t ntrials,
+            double* __restrict__ A,
+            int* bytes_per_elem,
+            int* mem_accesses_per_elem)
 {
+  *bytes_per_elem        = sizeof(*A);
+  *mem_accesses_per_elem = 2;
 
 #ifdef ERT_INTEL
   __assume_aligned(A, ERT_ALIGN);
