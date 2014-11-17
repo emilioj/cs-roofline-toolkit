@@ -1,5 +1,9 @@
 ERT_RESULTS Results.Linux.Intel.pureOpenMP
 
+ERT_SPEC_GBYTES_DRAM    51.20
+
+ERT_SPEC_GFLOPS         76.80
+
 ERT_DRIVER  driver1
 ERT_KERNEL  kernel1
 
