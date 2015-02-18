@@ -196,7 +196,17 @@ public class RooflineChart extends Application {
 				 
 				 Roofline rl = new Roofline();
 				 
-				 rl.System=fileName.substring(fileName.indexOf('.')+1,fileName.lastIndexOf('.'));
+				 
+				int firstdot=fileName.indexOf('.');
+				int lastdot=fileName.indexOf('.');
+				 
+				if(firstdot==lastdot){
+					rl.System=fileName.substring(0,firstdot);
+				}
+				else
+				{
+					rl.System=fileName.substring(firstdot+1,lastdot);
+				}
 				 processTerryRoofline(trl,rl);
 				 
 				 rooflines.add(rl);
@@ -799,6 +809,7 @@ public class RooflineChart extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Roofline Visualizer");
 		RooflineChart rc = new RooflineChart();
 		Scene scene = rc.createRooflineScene();
 		primaryStage.setScene(scene);
