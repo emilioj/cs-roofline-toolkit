@@ -463,7 +463,7 @@ class ert_core:
     emp_gbytes['metadata'] = emp_gbytes_metadata
 
     empirical = {}
-    empirical['meta_data'] = emp_metadata
+    empirical['metadata'] = emp_metadata
     empirical['gflops']    = emp_gflops
     empirical['gbytes']    = emp_gbytes
 
