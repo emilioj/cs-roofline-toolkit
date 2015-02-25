@@ -22,17 +22,17 @@ if ert.configure() != 0:
   sys.exit(1)
 sys.stdout.flush()
 
-flops_list = parse_int_list(ert.dict["ERT_FLOPS"][0])
+flops_list = parse_int_list(ert.dict["CONFIG"]["ERT_FLOPS"][0])
 
 for flop in flops_list:
-  print
-  print "FLOP count %d..." % flop
-  sys.stdout.flush()
+  if ert.options.verbose > 0:
+    print "FLOP count %d..." % flop
+    sys.stdout.flush()
 
   ert.flop = flop
 
   ert.flop_dir = "%s/FLOPS.%03d" % (ert.results_dir,flop)
-  make_dir_if_needed(ert.flop_dir,"run")
+  make_dir_if_needed(ert.flop_dir,"run",ert.options.verbose > 1)
 
   if ert.build() != 0:
     sys.stderr.write("\n--- Building ERT failed ---\n\n")
@@ -59,18 +59,12 @@ for flop in flops_list:
     sys.exit(1)
   sys.stdout.flush()
 
-  print
+  if ert.options.verbose > 0:
+    print
 
 if ert.roofline() != 0:
   sys.stderr.write("\n--- Making ERT roofline failed ---\n\n")
   sys.exit(1)
+
 sys.stdout.flush()
-
-print
-print "+-------------------------------------------------"
-print "| Empirical roofline graph:    '%s/roofline.ps'"   % ert.results_dir
-print "| Empirical roofline database: '%s/roofline.json'" % ert.results_dir
-print "+-------------------------------------------------"
-print
-
 sys.exit(0)

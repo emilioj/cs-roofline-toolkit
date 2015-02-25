@@ -49,7 +49,6 @@ maxband = max(band)
 
 maxgflops = max(gflops)
 
-window = 0.035*(maxband - minband)
 fraction = 1.05
 
 samples = 10000
@@ -71,9 +70,9 @@ for i in xrange(0,samples):
 print "  %7.2f GFLOPs" % maxgflops
 print
 
-band_list = [maxband]
+band_list = [[1000*maxband,1000]]
 
-maxc = -1.0
+maxc = -1
 maxi = -1
 for i in xrange(samples-3,1,-1):
   if counts[i] > 6:
@@ -82,10 +81,13 @@ for i in xrange(samples-3,1,-1):
       maxi = i
   else:
     if maxc > 1:
-      value = totals[maxi]/max(1,counts[maxi])
-      if abs(value - maxband)/maxband > 0.10:
-        band_list.append(value)
-    maxc = -1.0
+      value = float(totals[maxi])/max(1,counts[maxi])
+      if 1.25*value < float(band_list[-1][0])/band_list[-1][1]:
+        band_list.append([totals[maxi],counts[maxi]])
+      else:
+        band_list[-1][0] += totals[maxi]
+        band_list[-1][1] += counts[maxi]
+    maxc = -1
     maxi = -1
 
 print "  %7.2f Weight" % weight
@@ -99,7 +101,7 @@ for cache in xrange(1,cache_num+1):
 
 
 for (band,band_name) in zip(band_list,band_name_list):
-  print "  %7.2f %s" % (band,band_name)
+  print "  %7.2f %s" % (float(band[0])/band[1],band_name)
 
 print
 for m in meta_lines:
