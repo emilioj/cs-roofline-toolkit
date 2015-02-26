@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.ietf.jgss.Oid;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -139,6 +141,17 @@ public class RooflineChart extends Application {
 		}
 	}
 	
+	/**
+	 * A complete package of roofline data including the gflops and gbytes metrics and possibly metadata
+	 * @author wspear
+	 *
+	 */
+	public class TerryRooflineType{
+		TerryRooflineMetric gflops;
+		TerryRooflineMetric gbytes;
+		Map<String,Object> metadata;
+	}
+	
 	public class TerryRooflineMetric{
 		List<List<Object>> data;
 		Object metadata;
@@ -158,7 +171,8 @@ public class RooflineChart extends Application {
 			return system;
 		}
 		String system="Roofline";
-		Map<String,TerryRooflineMetric> empirical;
+		TerryRooflineType empirical;
+		TerryRooflineType spec;
 		//TeriRooflineType empirical;
 	}
 	
@@ -196,7 +210,9 @@ public class RooflineChart extends Application {
 				 
 				 Roofline rl = new Roofline();
 				 
-				 
+				 /**
+				  * Getting the chart name from the filename is a backup option. The hostname metadata field will override this if it is available.
+				  */
 				int firstdot=fileName.indexOf('.');
 				int lastdot=fileName.indexOf('.');
 				 
@@ -423,25 +439,36 @@ public class RooflineChart extends Application {
 		r.maxX=maxX;
 	}
 	
-	private static final String GBYTE="gbytes";
-	private static final String GFLOP="gflops";
+	//private static final String GBYTE="gbytes";
+	//private static final String GFLOP="gflops";
+	private static final String HOSTNAME="HOSTNAME";
+	//private static final String METADATA="metadata";
 	
 	void processTerryRoofline(TerryRoofline r, Roofline rl){
+		TerryRooflineMetric trm = r.empirical.gbytes;//.get(GBYTE);
+		 Map<?, ?> md = r.empirical.metadata;//.get(METADATA);
+		if(md!=null){
+			System.out.println(md.get(HOSTNAME).getClass());
+			String hostname = md.get(HOSTNAME).toString();
+			if(hostname!=null&&hostname.length()>0){
+				rl.setSystem(hostname);
+			}
+		}
 		
-		TerryRooflineMetric trm = r.empirical.get(GBYTE);
 		
 		for(List<Object> tuple:trm.data){
 			rl.bandwidth.add(new ChartLine(tuple));
 		}
 		
 		
-		trm = r.empirical.get(GFLOP);
+		trm=r.empirical.gflops;//.get(GFLOP);
+		
 		
 
 		for(List<Object> tuple:trm.data){
 			rl.gflops.add(new ChartLine(tuple));
 		}
-		
+
 		processRoofline(rl);
 	}
 	
