@@ -1,6 +1,8 @@
 ## Roofline Visualizer ##
 
-The Roofline Visualizer is implemented in JavaFX and requires Java version 8 or greater to run. After launching the Roofline Visualizer you can load Roofline .json files with the load button. Alternatively you may load the remote Roofline repository (currently containing a small sample of Roofline data) hosted by the University of Oregon. Sources with multiple Roofline datasets will populate the drop-down list in the upper left.
+The Roofline Visualizer is implemented in JavaFX and requires Java version 8 or greater to run. Launch the visualizer from the command line by running the script rooflineVisualizer.sh inside the directory containing RooflineChart.jar. Alternatively run the jar directoy with the command "java -jar /{path to jar}/RooflineChart.jar.
+
+After launching the Roofline Visualizer you can load Roofline .json files with the load button. Roofline .json files are generated when the ERT is run. Alternatively you may load the remote Roofline repository (currently containing a small sample of Roofline data) hosted by the University of Oregon by clicking on the "Load Remote" button. Sources with multiple Roofline datasets will populate the drop-down list in the upper left.
 
 The Roofline chart will display the Roofline metrics, labeled according to the key below. The exact values at the intersection points may be seen by mousing over the points on the chart.
 
