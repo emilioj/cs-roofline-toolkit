@@ -399,7 +399,7 @@ class ert_core:
       if key != "META_DATA":
         try:
           new_value = ast.literal_eval(parts[2].strip())
-        except SyntaxError:
+        except (SyntaxError,ValueError):
           new_value = parts[2].strip()
 
         if key in emp_gflops_metadata:
@@ -437,7 +437,7 @@ class ert_core:
       if key != "META_DATA":
         try:
           new_value = ast.literal_eval(parts[2].strip())
-        except SyntaxError:
+        except (SyntaxError,ValueError):
           new_value = parts[2].strip()
 
         if key in emp_gbytes_metadata:
