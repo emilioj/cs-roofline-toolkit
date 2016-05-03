@@ -113,11 +113,12 @@ class ert_core:
 
       if len(line) > 0 and line[0] != "#":
         line = line.split()
-        target = line[0]
-        value = line[1:]
+        if len(line) > 0:
+          target = line[0]
+          value = line[1:]
 
-        if len(target) > 0:
-          self.dict["CONFIG"][target] = value
+          if len(target) > 0:
+            self.dict["CONFIG"][target] = value
 
     if "ERT_MPI" not in self.dict["CONFIG"]:
       self.dict["CONFIG"]["ERT_MPI"] = [False]
